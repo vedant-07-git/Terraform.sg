@@ -1,5 +1,5 @@
 # Terraform-LB
-```
+```.tf
 root@ip-172-31-41-79:~# cat resource.tf 
 resource "aws_instance" "ec2" {
   ami                         = var.ami
