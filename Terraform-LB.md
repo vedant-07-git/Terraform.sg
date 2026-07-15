@@ -98,3 +98,14 @@ output "lb_dns_name" {
   value = aws_lb.lb.dns_name
 }
 ```
+# Data block
+```.tf
+root@ip-172-31-41-79:~# cat data.tf 
+data "aws_vpc" "default" {
+  default = true
+}
+
+output "vpc" {
+  value = data.aws_vpc.default.id
+}
+```
