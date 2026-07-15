@@ -107,3 +107,48 @@ output "vpc" {
   value = data.aws_vpc.default.id
 }
 ```
+
+
+# Launch Template root@ip-172-31-35-224:~# cat auto.tf 
+```.tf
+resource "aws_launch_template" "example" {
+  name_prefix   = "example-template"
+  image_id      = var.ami # Use valid Ubuntu AMI
+  instance_type = "t2.micro"
+
+  vpc_security_group_ids = var.sg
+
+  user_data = base64encode(<<EOF
+#!/bin/bash
+sudo apt update -y
+sudo apt install nginx -y
+systemctl start nginx
+systemctl enable nginx
+sudo echo " this si test server" > /var/www/html/index.html
+EOF
+  )
+}
+
+# Auto Scaling Group
+resource "aws_autoscaling_group" "example" {
+  name                = "example-asg"
+  min_size            = 1
+  max_size            = 3
+  desired_capacity    = 2
+  vpc_zone_identifier = ["subnet-0c3f510ad5802faf0", "subnet-0b34028d74921abc3"]
+
+  launch_template {
+    id      = aws_launch_template.example.id
+    version = "$Latest"
+  }
+
+  health_check_type         = "EC2"
+  health_check_grace_period = 300
+
+  tag {
+    key                 = "Name"
+    value               = "nginx-server"
+    propagate_at_launch = true
+  }
+}
+```
