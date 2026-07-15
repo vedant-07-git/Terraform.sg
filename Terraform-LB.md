@@ -1,6 +1,5 @@
-# Terraform-LB
-```.tf
-root@ip-172-31-41-79:~# cat resource.tf 
+# Terraform-LB root@ip-172-31-41-79:~# cat resource.tf
+```.tf 
 resource "aws_instance" "ec2" {
   ami                         = var.ami
   instance_type               = var.instance_type
@@ -98,9 +97,8 @@ output "lb_dns_name" {
   value = aws_lb.lb.dns_name
 }
 ```
-# Data block
+# Data block root@ip-172-31-41-79:~# cat data.tf 
 ```.tf
-root@ip-172-31-41-79:~# cat data.tf 
 data "aws_vpc" "default" {
   default = true
 }
